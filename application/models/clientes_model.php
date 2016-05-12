@@ -13,8 +13,14 @@ class Clientes_model extends CI_Model{
 
   public function ver_cliente($id)
   {
-      $sql = 'SELECT * FROM cliente where id=$id';
-      $query = $this->db->query($sql);
-      echo $query;
+      //$sql = 'SELECT * FROM usuario where id=$id';
+      $this->db->select('id, nombre, estado, telefono, ultimo_cobro');
+      $this->db->from('usuario');
+      $this->db->where('id', $id);
+      $consulta = $this->db->get();
+      $result = $consulta->row();
+      return $result; 
+      //$query = $this->db->query($sql);
+      //echo $query;
   }
 }

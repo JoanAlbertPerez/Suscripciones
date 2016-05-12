@@ -27,8 +27,10 @@ class Clientes extends CI_Controller
   public function sol_alta()
   {
     $id = $this->input->post('id');
-    $client = $this->clientes_model->ver_cliente($id);
+    $client = (array) $this->clientes_model->ver_cliente($id);
+    echo $client['telefono'];
     //$tfn = $client['telefono'];
+
 
   }
 }
