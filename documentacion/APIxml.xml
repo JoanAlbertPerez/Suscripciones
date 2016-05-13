@@ -1,0 +1,45 @@
+<!--xml sms-->
+<?xml version="1.0" encoding="UTF-8"?>
+<request>
+  <shortcode></shortcode>
+  <text></text>
+  <msisdn></msisdn>
+  <transaction></transaction>
+</request>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<response>
+  <statusCode></statusCode>
+  <statusMessage></statusMessage>
+  <txId></txId>
+</response>
+
+<!-- XML token -->
+<?xml version="1.0" encoding="UTF-8"?>
+<request>
+  <transaction></transaction>
+</request>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<response>
+  <statusCode></statusCode>
+  <statusMessage></statusMessage>
+  <txId></txId>
+  <token></token>
+</response>
+
+<!-- XML cobro -->
+<?xml version="1.0" encoding="UTF-8"?>
+<request>
+  <transaction></transaction>
+  <msisdn></msisdn>
+  <amount></amount>
+  <token></token>
+</request>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<response>
+  <statusCode></statusCode>
+  <statusMessage></statusMessage>
+  <txId></txId>
+</response>

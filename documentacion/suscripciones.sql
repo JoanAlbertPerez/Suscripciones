@@ -70,3 +70,7 @@ create database suscripcion;
     primary key (id),
     foreign key (usuario_id) references usuario(id)
   );
+
+
+
+INSERT INTO `web_service`(`tipo`, `stat_CODE`, `stat_msg`, `transaction`, `msisdn`, `shortcode`, `text`, `token`, `tx_id`, `usuario_id`) VALUES (['pet-token'],['SUCCESS'],['algo'],[1],['666559977'],['666'],['algo2'],['154613564fsv4s31fv3TOKENagfrfd24a2352af4'],['1'],[1])
