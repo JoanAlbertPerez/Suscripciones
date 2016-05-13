@@ -55,5 +55,32 @@ class Registros_model extends CI_Model
     );
     return $this->db->insert('web_service', $data);
   }
+/*
+  public function getToken($data){
+    $tran = $this->ultima_trans();
+    //xml peticion token
+    $req = '<?xml version="1.0" encoding="UTF-8"?>
+    <request>
+      <transaction>'.$tran.'</transaction>
+    </request>';
+    $url = "http://52.30.94.95/token";
+    //return
+    $responseToken = $this->ws->requestWS($url, $req);
+    $xml = simplexml_load_string($responseToken) or die("Error: Cannot create object");
+    $data['transaction'] = $tran;
+    $data['tipo'] = 'ObtencionToken';
+    $data['text'] = NULL;
+    $data['txId'] = $xml->txId;
+    $data['statusCode'] = $xml->statusCode;
+    $data['statusMessage'] = $xml->statusMessage;
+    $data['token'] = $xml->token;
+
+    //insert
+    $this->setWsComunication($data);
+
+    //denana que fer segons STATUS_CODE
+    $data = $this->switchResponse($data);
+    return $data;
+  }*/
 }
 ?>
