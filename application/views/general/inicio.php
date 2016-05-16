@@ -1,4 +1,5 @@
-<div class="container" id="principal">
+  <div class="container" id="principal">
+    <div class="jumbotron center-block">
     <table id="datatable" class="display" cellspacing="0" width="100%">
       <thead>
         <tr>
@@ -59,4 +60,5 @@
         </tr>
       </tfoot>
     </table>
+  </div>
 </div>

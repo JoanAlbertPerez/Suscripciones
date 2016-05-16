@@ -8,6 +8,7 @@ class Registros_model extends CI_Model
   function __construct()
   {
     $this->load->database();
+    $this->load->library('web_services');
   }
 
   public function altas_bajas()
@@ -42,18 +43,42 @@ class Registros_model extends CI_Model
     return $query->row();
   }
 
-  public function set_token($code, $msg, $tx_id, $token, $usuario_id, $trans)
+  public function set_ws($tipo, $code, $msg, $tx_id, $token, $usuario_id, $trans, $msisdn, $amount, $text, $shortcode)
   {
     $data  = array(
-      'tipo' => 'pet_token',
+      'tipo' => $tipo,
       'stat_CODE' =>  $code,
       'stat_msg' => $msg,
       'tx_id' => $tx_id,
       'token' => $token,
       'usuario_id' => $usuario_id,
-      'transaction' => $trans
+      'transaction' => $trans,
+      'msisdn' => $msisdn,
+      'amount' => $amount,
+      'text' => $text,
+      'shortcode' => $shortcode
     );
     return $this->db->insert('web_service', $data);
+  }
+
+  public function set_cobro($code, $msisdn, $amount, $usuario_id)
+  {
+    if ($code == 'SUCCESS') {
+      $newCobro = array(
+        'tipo' => 'si',
+        'mensaje' => 'Se le han cobrado '.$amount.'€',
+        'usuario_id' => $usuario_id,
+        'telefono' => $msisdn
+      );
+      return $this->db->insert('cobros', $newCobro);
+    }
+
+  }
+
+  public function api_conn($url, $xml)
+  {
+      $response = $this->web_services->WSRequest($url, $xml);
+      return $response;
   }
 /*
   public function getToken($data){
