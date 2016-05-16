@@ -49,7 +49,7 @@ class Clientes extends CI_Controller
           case 0:
           $tipo = 'pet_token';
           $ws = (array) $this->registros_model->ultima_trans();
-          $data['trans'] <= $ws['transaction']+1;
+          $data['trans'] = $ws['transaction']+1;
           $xml_rq = '<?xml version="1.0" encoding="UTF-8"?>
           <request>
           <transaction>99999999999g</transaction>
@@ -57,14 +57,14 @@ class Clientes extends CI_Controller
           $url = "http://52.30.94.95/token";
           $xml_rsp = $this->registros_model->api_conn($url, $xml_rq);
           $xml = simplexml_load_string($xml_rsp);
-          $code = $xml->statusCode;
-          $msg = $xml->statusMessage;
-          $tx_id = $xml->txId;
-          $token = $xml->token;
-          //$reg_sw = $this->registros_model->set_ws($tipo_token, $code_token, $msg_token, $tx_id_token, $token_token, $usuario_id, $trans_token, $msisdn, $amount, $text, $shortcode);
+          $data['stat_code'] = $xml->statusCode;
+          $data['stat_msg'] = $xml->statusMessage;
+          $data['tx_id'] = $xml->txId;
+          $data['token'] = $xml->token;
+          //$reg_sw = $this->registros_model->set_ws($data);
           print_r(simplexml_load_string($xml_rq));
-          print_r($code);
-          switch ($code) {
+          print_r($data['stat_code']);
+          switch ($data['stat_code']) {
             case 'SUCCESS':
             $i = 1;
             break;
@@ -91,14 +91,14 @@ class Clientes extends CI_Controller
           $url = "http://52.30.94.95/bill";
           $xml_rsp = $this->registros_model->api_conn($url, $xml_rq);
           $xml = simplexml_load_string($xml_rsp_cobro);
-          $code = $xml->statusCode;
+          $data['stat_code'] = $xml->statusCode;
           $msg = $xml->statusMessage;
           $tx_id = $xml->txId;
           //$reg_cobro = $this->registros_model->set_cobro($code_cobro, $tfn)
           //$reg_sw = $this->registros_model->set_ws($tipo_cobro, $code_cobro, $msg_cobro, $tx_id_cobro, $token_token, $usuario_id, $trans_cobro, $msisdn, $amount, $text, $shortcode);
           print_r(simplexml_load_string($xml_rq));
-          print_r($code);
-          switch ($code) {
+          print_r($data['stat_code']);
+          switch ($data['stat_code']) {
             case 'SUCCESS':
             $i = 2;
             break;
@@ -119,9 +119,9 @@ class Clientes extends CI_Controller
           $tipo = 'pet_sms';
           $ws = (array) $this->registros_model->ultima_trans();
           $tran = $ws['transaction']+1;
-          if ($code == 'SUCCESS') {
+          if ($data['stat_code'] == 'SUCCESS') {
             $text = 'Se le ha dado de alta al servicio.';
-          }elseif ($code == 'NO_FUNDS') {
+          }elseif ($data['stat_code'] == 'NO_FUNDS') {
             $text = 'No se le ha podido dar de alta al servicio por falta de fondos.';
           }
           $xml_rq = '<?xml version="1.0" encoding="UTF-8"?>
@@ -134,12 +134,12 @@ class Clientes extends CI_Controller
           $url = 'http://52.30.94.95/send_sms';
           $xml_rsp = $this->registros_model->api_conn($url, $xml_rq);
           $xml = simplexml_load_string($xml_rsp);
-          $code = $xml->statusCode;
+          $data['stat_code'] = $xml->statusCode;
           $msg = $xml->statusMessage;
           $tx_id = $xml->txId;
           //$reg_sw = $this->registros_model->set_ws($tipo_sms, $code_sms, $msg_sms, $tx_id_sms, $token, $usuario_id, $trans_sms, $msisdn, $amount, $text, $shortcode);
           print_r(simplexml_load_string($xml_rq));
-          switch ($code) {
+          switch ($data['stat_code']) {
             case 'SUCCESS':
             $i = 10;
             break;
