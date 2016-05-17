@@ -43,69 +43,87 @@ class Registros_model extends CI_Model
     return $query->row();
   }
 
-  public function set_ws($tipo, $code, $msg, $tx_id, $token, $usuario_id, $trans, $msisdn, $amount, $text, $shortcode)
+  public function set_ws($data)
   {
-    $data  = array(
-      'tipo' => $tipo,
-      'stat_CODE' =>  $code,
-      'stat_msg' => $msg,
-      'tx_id' => $tx_id,
-      'token' => $token,
-      'usuario_id' => $usuario_id,
-      'transaction' => $trans,
-      'msisdn' => $msisdn,
-      'amount' => $amount,
-      'text' => $text,
-      'shortcode' => $shortcode
+    $insert  = array(
+      'tipo' => $data['tipo'],
+      'stat_code' =>  $data['stat_code'],
+      'stat_msg' => $data['stat_msg'],
+      'tx_id' => $data['tx_id'],
+      'token' => $data['token'],
+      'usuario_id' => $data['usuario_id'],
+      'transaction' => $data['transaction'],
+      'msisdn' => $data['msisdn'],
+      'amount' => $data['amount'],
+      'text' => $data['text'],
+      'shortcode' => $data['shortcode']
     );
-    return $this->db->insert('web_service', $data);
+    return $insert;
+    //$this->db->insert('web_service', $insert);
   }
 
-  public function set_cobro($code, $msisdn, $amount, $usuario_id)
+  public function set_cobro($cobrado, $data)
   {
-    if ($code == 'SUCCESS') {
-      $newCobro = array(
-        'tipo' => 'si',
-        'mensaje' => 'Se le han cobrado '.$amount.'€',
-        'usuario_id' => $usuario_id,
-        'telefono' => $msisdn
-      );
-      return $this->db->insert('cobros', $newCobro);
-    }
+    $newCobro = array(
+      'tipo' => $cobrado,
+      'mensaje' => $cobrado .' se le han cobrado '.$data['amount'].'€',
+      'usuario_id' => $data['usuario_id'],
+      'telefono' => $data['msisdn']
+    );
+    return $this->db->insert('cobros', $newCobro);
+  }
 
+
+
+  public function set_sms($enviado ,$data)
+  {
+    $newSms = array(
+      'tipo' => $enviado,
+      'mensaje' => $data['text'],
+      'usuario_id' => $data['usuario_id'],
+      'telefono' => $data['msisdn'],
+    );
+    return $this->db->insert('sms', $newSms);
   }
 
   public function api_conn($url, $xml)
   {
-      $response = $this->web_services->WSRequest($url, $xml);
-      return $response;
+    $response = $this->web_services->WSRequest($url, $xml);
+    return $response;
   }
-/*
+
+  public function cambiarEstado($orden, $usuario_id)
+  {
+    $update = array('estado' => $orden);
+    return $this->db->update('usuario', $data, aray('id'=>$usuario_id));
+  }
+
+  /*
   public function getToken($data){
-    $tran = $this->ultima_trans();
-    //xml peticion token
-    $req = '<?xml version="1.0" encoding="UTF-8"?>
-    <request>
-      <transaction>'.$tran.'</transaction>
-    </request>';
-    $url = "http://52.30.94.95/token";
-    //return
-    $responseToken = $this->ws->requestWS($url, $req);
-    $xml = simplexml_load_string($responseToken) or die("Error: Cannot create object");
-    $data['transaction'] = $tran;
-    $data['tipo'] = 'ObtencionToken';
-    $data['text'] = NULL;
-    $data['txId'] = $xml->txId;
-    $data['statusCode'] = $xml->statusCode;
-    $data['statusMessage'] = $xml->statusMessage;
-    $data['token'] = $xml->token;
+  $tran = $this->ultima_trans();
+  //xml peticion token
+  $req = '<?xml version="1.0" encoding="UTF-8"?>
+  <request>
+  <transaction>'.$tran.'</transaction>
+  </request>';
+  $url = "http://52.30.94.95/token";
+  //return
+  $responseToken = $this->ws->requestWS($url, $req);
+  $xml = simplexml_load_string($responseToken) or die("Error: Cannot create object");
+  $data['transaction'] = $tran;
+  $data['tipo'] = 'ObtencionToken';
+  $data['text'] = NULL;
+  $data['txId'] = $xml->txId;
+  $data['statusCode'] = $xml->statusCode;
+  $data['statusMessage'] = $xml->statusMessage;
+  $data['token'] = $xml->token;
 
-    //insert
-    $this->setWsComunication($data);
+  //insert
+  $this->setWsComunication($data);
 
-    //denana que fer segons STATUS_CODE
-    $data = $this->switchResponse($data);
-    return $data;
-  }*/
+  //denana que fer segons STATUS_CODE
+  $data = $this->switchResponse($data);
+  return $data;
+}*/
 }
 ?>

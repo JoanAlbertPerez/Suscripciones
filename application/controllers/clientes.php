@@ -27,24 +27,28 @@ class Clientes extends CI_Controller
 
   public function sol_alta()
   {
-    $i = 0;
+
     $usuario_id = $this->input->post('id');
     $client = (array) $this->clientes_model->ver_cliente($usuario_id);
     if ($client['estado'] == 'baja') {
+      $orden = 'alta';
+      $data = array(
+        'tipo' => '',
+        'stat_code' => '',
+        'stat_msg' => '',
+        'transaction' => '',
+        'msisdn' => '',
+        'shortcode' => '',
+        'text' => '',
+        'token' => '',
+        'tx_id' => '',
+        'usuario_id' => $usuario_id,
+        'amount' => ''
+     );
+     $i = 0;
+$fnt = '999999999999999999999999999915236580411';
       while ($i != 10) {
-        $data = array(
-          'tipo' => '',
-          'stat_code' => '',
-          'stat_msg' => '',
-          'transaction' => '',
-          'msisdn' => '',
-          'shortcode' => '',
-          'text' => '',
-          'token' => '',
-          'tx_id' => '',
-          'usuario_id' => $usuario_id,
-          'amount' => ''
-       );
+
         switch ($i) {
           case 0:
           $tipo = 'pet_token';
@@ -52,7 +56,7 @@ class Clientes extends CI_Controller
           $data['transaction'] = $ws['transaction']+1;
           $xml_rq = '<?xml version="1.0" encoding="UTF-8"?>
           <request>
-          <transaction>99999999999g</transaction>
+          <transaction>'.$fnt.'</transaction>
           </request>';
           $url = "http://52.30.94.95/token";
           $xml_rsp = $this->registros_model->api_conn($url, $xml_rq);
@@ -61,17 +65,23 @@ class Clientes extends CI_Controller
           $data['stat_msg'] = $xml->statusMessage;
           $data['tx_id'] = $xml->txId;
           $data['token'] = $xml->token;
-          //$reg_sw = $this->registros_model->set_ws($data);
-          print_r(simplexml_load_string($xml_rq));
-          print_r($data['stat_code']);
+          $reg_sw = $this->registros_model->set_ws($data);
+          print_r($reg_sw);
+          echo "-----------------------".$fnt."-----------------------";
+          //print_r($data['stat_code']);
           switch ($data['stat_code']) {
-            case 'SUCCESS':
+            case 'TOKEN_SUCCESS':
             $i = 1;
             break;
             case 'SYSTEM_ERROR':
             $i = 0;
             break;
-          }
+            default:
+            $cobrado = 'no';
+            echo "-------------------T_P_M---------------------";
+            $i = 10;
+            break;
+          }$fnt=$fnt.'1';
           break;
 
 
@@ -83,57 +93,56 @@ class Clientes extends CI_Controller
           $data['transaction'] = $ws['transaction']+1;
           $xml_rq = '<?xml version="1.0" encoding="UTF-8"?>
           <request>
-          <transaction>99999999999h</transaction>
+          <transaction>'.$fnt.'</transaction>
           <msisdn>'.$data['msisdn'].'</msisdn>
           <amount>'.$data['amount'].'</amount>
           <token>'.$data['token'].'</token>
           </request>';
           $url = "http://52.30.94.95/bill";
           $xml_rsp = $this->registros_model->api_conn($url, $xml_rq);
-          $xml = simplexml_load_string($xml_rsp_cobro);
+          $xml = simplexml_load_string($xml_rsp);
           $data['stat_code'] = $xml->statusCode;
           $data['stat_msg'] = $xml->statusMessage;
           $data['tx_id'] = $xml->txId;
-          //$reg_sw = $this->registros_model->set_ws($data);
-          print_r(simplexml_load_string($xml_rq));
-          print_r($data['stat_code']);
+          $reg_sw = $this->registros_model->set_ws($data);
+          print_r($reg_sw);
+          echo "-----------------------".$fnt."-----------------------";
+          //print_r($data['stat_code']);
           switch ($data['stat_code']) {
             case 'SUCCESS':
             $cobrado = 'si';
-            //$reg_cobro = $this->registros_model->set_cobro($cobrado, $data['stat_code'], $data['msisdn']);
-            //if ($reg_cobro == TRUE) {
               $i = 2;
-            //}
             break;
+
             case 'NO_FUNDS':
             $cobrado = 'no';
-            //$reg_cobro = $this->registros_model->set_cobro($cobrado, $data['stat_code'], $data['msisdn']);
-            //if ($reg_cobro == TRUE) {
               $i = 2;
-            //}
             break;
+
             case 'SYSTEM_ERROR':
             $cobrado = 'no';
-            //$reg_cobro = $this->registros_model->set_cobro($cobrado, $data['stat_code'], $data['msisdn']);
-            //if ($reg_cobro == TRUE) {
             $i = 1;
-            //}
             break;
+
             case 'CHARGING_ERROR':
             $cobrado = 'no';
-            //$reg_cobro = $this->registros_model->set_cobro($cobrado, $data['stat_code'], $data['msisdn']);
-            //if ($reg_cobro == TRUE) {
             $i = 0;
-            //}
             break;
-          }
+            default:
+            $cobrado = 'no';
+            echo "-------------------T_P_M---------------------";
+            $i = 10;
+            break;
+          }$reg_cobro = $this->registros_model->set_cobro($cobrado, $data);
+          print_r($reg_cobro);
+          $fnt=$fnt.'2';
           break;
 
 
           case 2:
           $tipo = 'pet_sms';
           $ws = (array) $this->registros_model->ultima_trans();
-          $tran = $ws['transaction']+1;
+          $data['transaction'] = $ws['transaction']+1;
           if ($data['stat_code'] == 'SUCCESS') {
             $data['text'] = 'Se le ha dado de alta al servicio.';
           }elseif ($data['stat_code'] == 'NO_FUNDS') {
@@ -144,7 +153,7 @@ class Clientes extends CI_Controller
           <shortcode>'.$data['shortcode'] = substr($data["msisdn"], 0, 3).'</shortcode>
           <text>'.$data["text"].'</text>
           <msisdn>'.$data["msisdn"].'</msisdn>
-          <transaction>'.$data["tran"].'</transaction>
+          <transaction>'.$fnt.'</transaction>
           </request>';
           $url = 'http://52.30.94.95/send_sms';
           $xml_rsp = $this->registros_model->api_conn($url, $xml_rq);
@@ -152,29 +161,76 @@ class Clientes extends CI_Controller
           $data['stat_code'] = $xml->statusCode;
           $data['stat_msg'] = $xml->statusMessage;
           $data['tx_id'] = $xml->txId;
-          //$reg_sw = $this->registros_model->set_ws($data);
-          print_r(simplexml_load_string($xml_rq));
+
+          $reg_sw = $this->registros_model->set_ws($data);
+          print_r($reg_sw);
+          echo "-----------------------".$fnt."-----------------------";
+
+          //print_r($data['stat_code']);
           switch ($data['stat_code']) {
             case 'SUCCESS':
+            $enviado = 'si';
             $i = 10;
             break;
             case 'CHARGING_ERROR':
+            $enviado = 'no';
             $i = 2;
             break;
             case 'SYSTEM_ERROR':
+            $enviado = 'no';
             $i = 0;
             break;
-          }
+            default:
+            $enviado = 'no';
+            echo "-------------------T_P_M---------------------";
+            $i = 10;
+            break;
+          }$fnt=$fnt.'3';
+          $reg_sms = $this->registros_model->set_sms($enviado, $data);
+          print_r($reg_sms);
           break;
-        }
-      }
+
+        }echo "----------------Entrant al cas ". $i."----------------";
+      }echo "------------------Finalitzat------------------";
+      $alta = $this->registros_model->cambiarEstado($orden, $usuario_id);
+    }elseif ($client['estado'] == 'alta')) {
+      $data = array(
+        'tipo' => '',
+        'stat_code' => '',
+        'stat_msg' => '',
+        'transaction' => '',
+        'msisdn' => $client['telefono'],
+        'shortcode' => substr($client['telefono'];, 0, 3),
+        'text' => 'Se te ha dado de baja del servicio.',
+        'token' => '',
+        'tx_id' => '',
+        'usuario_id' => $usuario_id,
+        'amount' => ''
+     );
+      $tipo = 'pet_sms';
+      $ws = (array) $this->registros_model->ultima_trans();
+      $data['transaction'] = $ws['transaction']+1;
+      $xml_rq = '<?xml version="1.0" encoding="UTF-8"?>
+      <request>
+      <shortcode>'.$data['shortcode'].'</shortcode>
+      <text>'.$data["text"].'</text>
+      <msisdn>'.$data["msisdn"].'</msisdn>
+      <transaction>'.$fnt.'</transaction>
+      </request>';
+      $url = 'http://52.30.94.95/send_sms';
+      $xml_rsp = $this->registros_model->api_conn($url, $xml_rq);
+      $xml = simplexml_load_string($xml_rsp);
+      $reg_sw = $this->registros_model->set_ws($data);
+      $reg_sms = $this->registros_model->set_sms($data)
+      print_r($reg_sw);
+
     }
   }
   /*
 
   $tipo_token = 'pet_token';
   $ws = (array) $this->registros_model->ultima_trans();
-  $tran_token = $ws['transaction']+1;
+  $data['transaction']_token = $ws['transaction']+1;
   $xml_rq_token = '<?xml version="1.0" encoding="UTF-8"?>
   <request>
   <transaction>99999999999g</transaction>

@@ -1,6 +1,7 @@
 <html>
 <head>
-  <title>Kitmaker Blog</title>
+  <link rel="shortcut icon" href="http://www.kitmaker.com/wp-content/uploads/2015/09/favicon_1.png">
+  <title>Kitmaker Suscripciones</title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
   <script src="<?php echo base_url(); ?>assets/js/script.js" type="text/javascript"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
