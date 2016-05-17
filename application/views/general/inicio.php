@@ -16,8 +16,7 @@
           <th>Estado</th>
           <th>Telefono</th>
           <th>Ultimo Cobro</th>
-          <th>Dar de alta</th>
-          <th>Dar de baja</th>
+          <th>Dar de alta/baja</th>
         </tr>
       </thead>
       <?php foreach ($cliente as $cli): ?>
@@ -40,18 +39,21 @@
           <td>
             <?php echo $cli['ultimo_cobro']; ?>
           </td>
+          <?php if ($cli['estado'] == 'baja') {?>
           <td>
             <form class="element-entry" action="<?php echo site_url('Clientes/sol_alta'); ?>" method="post">
               <input type="hidden" id="id" name="id" value="<?php echo $cli['id'] ?>">
               <input type="submit" name="alta" value="alta">
             </form>
           </td>
-          <td>
-            <form class="element-entry" action="<?php echo site_url('Clientes/sol_baja'); ?>" method="post">
-              <input type="hidden" name="id" value="<?php echo $cli['id'] ?>">
-              <input type="submit" name="baja" value="baja">
-            </form>
-          </td>
+          <?php }else{ ?>
+            <td>
+              <form class="element-entry" action="<?php echo site_url('Clientes/sol_alta'); ?>" method="post">
+                <input type="hidden" id="id" name="id" value="<?php echo $cli['id'] ?>">
+                <input type="submit" name="alta" value="baja">
+              </form>
+            </td>
+            <?php } ?>
         </tr>
       <?php endforeach; ?>
       <tfoot>
@@ -62,8 +64,7 @@
           <th>Estado</th>
           <th>Telefono</th>
           <th>Ultimo Cobro</th>
-          <th>Dar de alta</th>
-          <th>Dar de baja</th>
+          <th>Dar de alta/baja</th>
         </tr>
       </tfoot>
     </table>
