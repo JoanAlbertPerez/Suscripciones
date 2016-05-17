@@ -58,8 +58,7 @@ class Registros_model extends CI_Model
       'text' => $data['text'],
       'shortcode' => $data['shortcode']
     );
-    return $insert;
-    //$this->db->insert('web_service', $insert);
+    return $this->db->insert('web_service', $insert);
   }
 
   public function set_cobro($cobrado, $data)
@@ -95,35 +94,15 @@ class Registros_model extends CI_Model
   public function cambiarEstado($orden, $usuario_id)
   {
     $update = array('estado' => $orden);
-    return $this->db->update('usuario', $data, aray('id'=>$usuario_id));
+    return $this->db->update('usuario', $update, array('id' => $usuario_id));
   }
 
-  /*
-  public function getToken($data){
-  $tran = $this->ultima_trans();
-  //xml peticion token
-  $req = '<?xml version="1.0" encoding="UTF-8"?>
-  <request>
-  <transaction>'.$tran.'</transaction>
-  </request>';
-  $url = "http://52.30.94.95/token";
-  //return
-  $responseToken = $this->ws->requestWS($url, $req);
-  $xml = simplexml_load_string($responseToken) or die("Error: Cannot create object");
-  $data['transaction'] = $tran;
-  $data['tipo'] = 'ObtencionToken';
-  $data['text'] = NULL;
-  $data['txId'] = $xml->txId;
-  $data['statusCode'] = $xml->statusCode;
-  $data['statusMessage'] = $xml->statusMessage;
-  $data['token'] = $xml->token;
+  public function cobrar($usuario_id)
+  {
+    $date = date('Y-m-d');
+    $update = array('ultimo_cobro' => $date);
+      return $this->db->update('usuario', $update, array('id' => $usuario_id));
+  }
 
-  //insert
-  $this->setWsComunication($data);
-
-  //denana que fer segons STATUS_CODE
-  $data = $this->switchResponse($data);
-  return $data;
-}*/
 }
 ?>

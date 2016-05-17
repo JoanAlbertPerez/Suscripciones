@@ -1,5 +1,12 @@
   <div class="container" id="principal">
     <div class="jumbotron center-block">
+      <?php if ($this->session->userdata('alert')) { ?>
+        <div class="container center-block">
+          <p>
+            <?php echo $this->session->userdata('alert'); ?>
+          </p>
+        </div>
+      <?php } ?>
     <table id="datatable" class="display" cellspacing="0" width="100%">
       <thead>
         <tr>
