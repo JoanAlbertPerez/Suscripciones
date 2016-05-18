@@ -38,9 +38,16 @@ class Registros_model extends CI_Model
 
   public function ultima_trans()
   {
-    $sql = "SELECT * from web_service where id = (select max(id))";
+    /*  $sql = "SELECT * from web_service where id = (select max(id))";
     $query = $this->db->query($sql);
     return $query->row();
+    $this->db->select_max('id');
+    $query = $this->db->get('web_service');
+    return $query;*/
+    $this->db->select_max('id');
+    $Q = $this->db->get('web_service');
+    $row = $Q->row_array();
+    return $row['id']+1;
   }
 
   public function set_ws($data)
@@ -101,7 +108,14 @@ class Registros_model extends CI_Model
   {
     $date = date('Y-m-d');
     $update = array('ultimo_cobro' => $date);
-      return $this->db->update('usuario', $update, array('id' => $usuario_id));
+    return $this->db->update('usuario', $update, array('id' => $usuario_id));
+  }
+
+  public function mensual()
+  {
+      $select = 'SELECT * FROM usuario WHERE ultimo_cobro <= CURDATE() AND ultimo_cobro <= DATE_SUB(CURDATE(), INTERVAL 30 DAY)';
+      $query = $this->db->query($select);
+      return $query->result_array();
   }
 
 }

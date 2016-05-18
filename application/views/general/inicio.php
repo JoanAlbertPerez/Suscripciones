@@ -41,14 +41,14 @@
           </td>
           <?php if ($cli['estado'] == 'baja') {?>
           <td>
-            <form class="element-entry" action="<?php echo site_url('Clientes/sol_alta'); ?>" method="post">
+            <form class="element-entry" action="<?php echo site_url('Clientes/pedir_alta'); ?>" method="post">
               <input type="hidden" id="id" name="id" value="<?php echo $cli['id'] ?>">
               <input type="submit" name="alta" value="alta">
             </form>
           </td>
           <?php }else{ ?>
             <td>
-              <form class="element-entry" action="<?php echo site_url('Clientes/sol_alta'); ?>" method="post">
+              <form class="element-entry" action="<?php echo site_url('Clientes/pedir_baja'); ?>" method="post">
                 <input type="hidden" id="id" name="id" value="<?php echo $cli['id'] ?>">
                 <input type="submit" name="alta" value="baja">
               </form>
