@@ -2,15 +2,15 @@
 /**
 *
 */
-class Registrod extends CI_Controller
+class Registros extends CI_Controller
 {
 
   function __construct()
   {
     parent::__construct();
     $this->load->helper('url_helper');
-    $this->load->model('Registros_model');
-    $this->load->model('Clientes_model');
+    $this->load->model('registros_model');
+    $this->load->model('clientes_model');
   }
 
   public function altas_bajas()
@@ -21,9 +21,14 @@ class Registrod extends CI_Controller
       show_404();
     }
 
-    $this->load->view('templates/header');
-    $this->load->library('registros/altas_bajas');
-    $this->load->library('templates/footer');
+    if ($this->session->userdata('logueado')) {
+      $this->load->view('templates/header');
+      $this->load->view('registro/altas_bajas', $data);
+      $this->load->view('templates/footer');
+    }else {
+      redirect('usuarios/iniciar_sesion');
+    }
+
   }
 
   public function cobros()
@@ -33,10 +38,13 @@ class Registrod extends CI_Controller
     if (empty($data['cobros'])) {
       show_404();
     }
-
-    $this->load->view('templates/header');
-    $this->load->library('registros/cobros');
-    $this->load->library('templates/footer');
+    if ($this->session->userdata('logueado')) {
+      $this->load->view('templates/header');
+      $this->load->view('registro/cobros', $data);
+      $this->load->view('templates/footer');
+    }else {
+      redirect('usuarios/iniciar_sesion');
+    }
   }
 
   public function sms()
@@ -46,10 +54,13 @@ class Registrod extends CI_Controller
     if (empty($data['sms'])) {
       show_404();
     }
-
-    $this->load->view('templates/header');
-    $this->load->library('registros/sms');
-    $this->load->library('templates/footer');
+    if ($this->session->userdata('logueado')) {
+      $this->load->view('templates/header');
+      $this->load->view('registro/sms', $data);
+      $this->load->view('templates/footer');
+    }else {
+      redirect('usuarios/iniciar_sesion');
+    }
   }
   public function web_service()
   {
@@ -58,10 +69,13 @@ class Registrod extends CI_Controller
     if (empty($data['web_service'])) {
       show_404();
     }
-
-    $this->load->view('templates/header');
-    $this->load->library('registros/web_service');
-    $this->load->library('templates/footer');
+    if ($this->session->userdata('logueado')) {
+      $this->load->view('templates/header');
+      $this->load->view('registro/web_service', $data);
+      $this->load->view('templates/footer');
+    }else {
+      redirect('usuarios/iniciar_sesion');
+    }
   }
 
 

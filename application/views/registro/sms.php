@@ -1,5 +1,6 @@
 <div class="container" id="sms">
-  <h2>SMS</h2>
+  <div class="jumbotron center-block">
+    <h2>SMS</h2>
     <table id="datatable" class="display" cellspacing="0" width="100%">
       <thead>
         <tr>
@@ -31,16 +32,17 @@
           <td>
             <?php echo $sm['fecha']; ?>
           </td>
-      <?php endforeach; ?>
-      <tfoot>
-        <tr>
-          <th>ID</th>
-          <th>Tipo</th>
-          <th>Mensaje</th>
-          <th>Telefono</th>
-          <th>ID Usuario</th>
-          <th>Fecha</th>
-        </tr>
-      </tfoot>
-    </table>
-</div>
+        <?php endforeach; ?>
+        <tfoot>
+          <tr>
+            <th>ID</th>
+            <th>Tipo</th>
+            <th>Mensaje</th>
+            <th>Telefono</th>
+            <th>ID Usuario</th>
+            <th>Fecha</th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>

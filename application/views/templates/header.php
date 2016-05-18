@@ -43,11 +43,12 @@
             <?php  if ($this->session->userdata('logueado')) { ?>
               <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
-                  <li><a href="<?php echo site_url("news"); ?>">Inicio</a></li>
-                  <li><a href="<?php echo site_url("news/create"); ?>">Añadir entrada</a></li>
+                  <li><a href="<?php echo site_url("registros/altas_bajas"); ?>">Altas/Bajas</a></li>
+                  <li><a href="<?php echo site_url("registros/cobros"); ?>">Cobros</a></li>
+                  <li><a href="<?php echo site_url("registros/sms"); ?>">SMS</a></li>
+                  <li><a href="<?php echo site_url("registros/web_service"); ?>">Web Service</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                  <li><a href="<?php echo site_url('usuarios/logueado'); ?>"span class="glyphicon glyphicon-user"> Administración</a></li>
                   <li><a href="<?php echo site_url('usuarios/cerrar_sesion');?>" <span class="glyphicon glyphicon-log-out"></span> LogOut</a></li>
                 </ul>
               </div>

@@ -79,7 +79,16 @@ class Registros_model extends CI_Model
     return $this->db->insert('cobros', $newCobro);
   }
 
-
+ public function set_altas_bajas($tipo, $data)
+ {
+   $newAlta_baja = array(
+     'tipo' => $tipo,
+     'mensaje' => 'Se le ha dado de '.$tipo,
+     'usuario_id' => $data['usuario_id'],
+     'telefono' => $data['msisdn']
+   );
+   return $this->db->insert('altas_bajas', $newAlta_baja);
+ }
 
   public function set_sms($enviado ,$data)
   {
@@ -113,7 +122,7 @@ class Registros_model extends CI_Model
 
   public function mensual()
   {
-      $select = 'SELECT * FROM usuario WHERE ultimo_cobro <= CURDATE() AND ultimo_cobro <= DATE_SUB(CURDATE(), INTERVAL 30 DAY)';
+      $select = 'SELECT * FROM usuario WHERE estado = "alta" AND ultimo_cobro <= CURDATE() AND ultimo_cobro <= DATE_SUB(CURDATE(), INTERVAL 30 DAY)';
       $query = $this->db->query($select);
       return $query->result_array();
   }
