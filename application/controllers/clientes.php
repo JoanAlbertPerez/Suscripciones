@@ -78,6 +78,7 @@ class Clientes extends CI_Controller
   {
     $id = $this->input->post('id');
     $cliente = (array) $this->clientes_model->ver_cliente($id);
+        print_r($cliente);
     $data = array(
       'tipo' => '',
       'stat_code' => '',

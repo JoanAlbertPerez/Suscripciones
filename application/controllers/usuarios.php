@@ -6,6 +6,7 @@ class Usuarios extends CI_Controller
     parent::__construct();
     $this->load->helper('url_helper');
     $this->load->model('usuarios_model');
+    $this->load->model('Registros_model');
   }
 
 
@@ -32,7 +33,7 @@ class Usuarios extends CI_Controller
       if ($usuario) {
         $usuario_data = array('id' => $usuario->id,'nombre' => $usuario->nombre,'logueado' => TRUE);
         $this->session->set_userdata($usuario_data);
-        redirect('Clientes/dataTable');
+        redirect('Clientes/cobra_mes');
       } else {
         $this->session->set_flashdata('error', 'El usuario o la contraseña son incorrectos.');
         redirect('usuarios/iniciar_sesion');
