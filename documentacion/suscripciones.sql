@@ -39,6 +39,7 @@ create database suscripcion;
     mensaje varchar(128),
     usuario_id int(25) not null,
     telefono varchar(9) not null,
+    fecha datetime CURRENT_TIMESTAMP,
     primary key (id),
     foreign key (usuario_id) references usuario(id)
   );
@@ -50,6 +51,7 @@ create database suscripcion;
     mensaje varchar(128),
     usuario_id int(25) not null,
     telefono varchar(9) not null,
+    fecha datetime CURRENT_TIMESTAMP,
     primary key (id),
     foreign key (usuario_id) references usuario(id)
   );
@@ -58,15 +60,17 @@ create database suscripcion;
   create table web_service(
     id int(25) not null auto_increment,
     tipo enum('pet_token', 'pet_sms', 'pet_cobro') not null,
-    stat_CODE enum('SUCCESS', 'BAD_REQUEST-TYPE', 'NO_REQUEST', 'SYSTEM_ERROR', 'INVALID_XML', 'MISSING_PROPERTY', 'MISSING_CREDENTIALS', 'INVALID_CREDENTIALS', 'TOKEN_SUCCESS', 'TOKEN_ALREADY_USED', 'INVALID_TOKEN', 'NO_FUNDS', 'CHARGING_ERROR', 'DUPLICATED_TR' ),
-    stat_msg varchar(128),
-    transaction varchar(128),
-    msisdn varchar(9) not null,
-    shortcode varchar(3) not null,
-    text varchar(255) not null,
-    token varchar(255) not null,
+    stat_code enum('SUCCESS', 'BAD_REQUEST-TYPE', 'NO_REQUEST', 'SYSTEM_ERROR', 'INVALID_XML', 'MISSING_PROPERTY', 'MISSING_CREDENTIALS', 'INVALID_CREDENTIALS', 'TOKEN_SUCCESS', 'TOKEN_ALREADY_USED', 'INVALID_TOKEN', 'NO_FUNDS', 'CHARGING_ERROR', 'DUPLICATED_TR' ) not null,
+    stat_msg varchar(128) not null,
+    transaction int(255) not null,
+    msisdn varchar(9),
+    shortcode varchar(3),
+    text varchar(255),
+    token varchar(255),
     tx_id varchar(25) not null,
     usuario_id int(25) not null,
+    fecha datetime CURRENT_TIMESTAMP,
+    amount double(10,4),
     primary key (id),
     foreign key (usuario_id) references usuario(id)
   );
@@ -74,3 +78,18 @@ create database suscripcion;
 
 
 INSERT INTO `web_service`(`tipo`, `stat_CODE`, `stat_msg`, `transaction`, `msisdn`, `shortcode`, `text`, `token`, `tx_id`, `usuario_id`) VALUES (['pet-token'],['SUCCESS'],['algo'],[1],['666559977'],['666'],['algo2'],['154613564fsv4s31fv3TOKENagfrfd24a2352af4'],['1'],[1])
+
+
+/*
+ Campos con Datetime tienen CURRENT_TIMESTAMP por defecto.
+ tabla web_service:
+ stat_CODE -> stat_code
+ se introducen los campos fecha (datetime) y amount (double(10,4)).
+ transaction cambia su type a int(255).
+ msisdn, shortcode, text y token pasan a ser anulable, stat_code, stat_msg y transaction pasan a ser not null.
+
+ tabla sms:
+ Se introduce el campo fecha (datetime).
+
+ tabla cobros:
+ Se introduce el campo fecha (datetime).
